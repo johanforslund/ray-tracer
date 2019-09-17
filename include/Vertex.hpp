@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/glm.hpp>
 
 class Vertex {
 
@@ -9,5 +10,5 @@ public:
 private:
 
 private:
-    double x, y, z, w;
+    glm::vec4 vertex;
 };

@@ -6,9 +6,10 @@ class Pixel {
 
 public:
     Pixel();
+    Pixel(ColorDbl _color);
     ~Pixel();
 
-private:
     ColorDbl color;
+private:
     Ray ray;
 };

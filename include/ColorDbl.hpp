@@ -4,8 +4,8 @@ class ColorDbl {
 
 public:
     ColorDbl();
+    ColorDbl(double _r, double _g, double _b);
     ~ColorDbl();
 
-private:
     double r, g, b;
 };

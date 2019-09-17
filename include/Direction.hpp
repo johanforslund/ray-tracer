@@ -8,5 +8,5 @@ public:
     ~Direction();
 
 private:
-    double x, y, z;
+    glm::vec3 direction;
 };

@@ -1,8 +1,10 @@
 #include <iostream>
-#include "Scene.hpp"
+#include "Camera.hpp"
 
 int main() {
-    Scene scene = Scene();
+    Camera camera = Camera();
+
+    camera.createImage();
 
     std::cout << "Hello Easy C++ project!" << std::endl;
 }
