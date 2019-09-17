@@ -3,6 +3,7 @@
 #include "ColorDbl.hpp"
 #include "Direction.hpp"
 #include "Ray.hpp"
+#include <glm/glm.hpp>
 
 class Triangle {
 
