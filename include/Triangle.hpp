@@ -9,12 +9,15 @@ class Triangle {
 
 public:
     Triangle();
+
+    Triangle(Vertex v1, Vertex v2, Vertex v3, ColorDbl _color, Direction _normalDirection);
+    
     ~Triangle();
 
     void rayIntersection(Ray ray);
 
 private:
-    Vertex vertexList;
+    Vertex vertexList[3];
     ColorDbl color;
     Direction normalDirection;
 };

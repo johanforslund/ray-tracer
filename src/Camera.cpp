@@ -14,6 +14,10 @@ Camera::~Camera() {
 
 }
 
+void Camera::render() {
+    
+}
+
 void Camera::createImage() {
     double maxValue = 0;
     for (int i = 0; i < 800; i++) {

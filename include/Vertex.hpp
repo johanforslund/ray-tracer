@@ -5,6 +5,9 @@ class Vertex {
 
 public:
     Vertex();
+
+    Vertex(glm::vec4 _vertex);
+
     ~Vertex();
 
 private:

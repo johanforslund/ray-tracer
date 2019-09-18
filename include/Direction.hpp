@@ -5,6 +5,8 @@ class Direction {
 
 public:
     Direction();
+    Direction(glm::vec3 _direction);
+
     ~Direction();
 
 private:

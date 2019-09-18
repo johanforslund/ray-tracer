@@ -1,6 +1,7 @@
 #pragma once
 #include "Triangle.hpp"
 #include "Ray.hpp"
+#include <vector>
 
 class Scene {
 
@@ -11,6 +12,5 @@ public:
     void intersectionTest(Ray ray);
 
 private:
-    static const int TRIANGLE_AMOUNT = 24;
-    Triangle triangleList[TRIANGLE_AMOUNT];
+    std::vector<Triangle> triangleList;
 };
