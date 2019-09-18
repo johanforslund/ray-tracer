@@ -9,7 +9,7 @@ public:
     Scene();
     ~Scene();
 
-    void intersectionTest(Ray ray);
+    void getIntersection(Ray* ray);
 
 private:
     std::vector<Triangle> triangleList;

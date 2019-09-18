@@ -1,5 +1,4 @@
 #pragma once
-#include "Vertex.hpp"
 #include "Pixel.hpp"
 #include <glm/glm.hpp>
 
@@ -12,8 +11,9 @@ public:
     void render();
     void createImage();
 
-private:
-    Vertex eye1, eye2;
-    bool farEye;
     Pixel pixels[800][800];
+private:
+    glm::vec3 eye1, eye2;
+    bool farEye;
+    glm::vec3 cameraPlane[4];
 };

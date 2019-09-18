@@ -10,6 +10,5 @@ public:
     ~Pixel();
 
     ColorDbl color;
-private:
-    Ray ray;
+    Ray* ray;
 };

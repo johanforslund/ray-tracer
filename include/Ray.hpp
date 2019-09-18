@@ -1,6 +1,6 @@
 #pragma once
-#include "Vertex.hpp"
 #include "ColorDbl.hpp"
+#include <glm/glm.hpp>
 
 class Triangle;
 
@@ -8,10 +8,11 @@ class Ray {
 
 public:
     Ray();
+    Ray(glm::vec4 _start, glm::vec4 _end);
     ~Ray();
 
-private:
-    Vertex start, end;
+    glm::vec4 start, end;
     ColorDbl color;
+private:
     Triangle* endTriangle;
 };

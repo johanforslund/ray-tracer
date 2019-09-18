@@ -1,7 +1,5 @@
 #pragma once
-#include "Vertex.hpp"
 #include "ColorDbl.hpp"
-#include "Direction.hpp"
 #include "Ray.hpp"
 #include <glm/glm.hpp>
 
@@ -10,14 +8,14 @@ class Triangle {
 public:
     Triangle();
 
-    Triangle(Vertex v1, Vertex v2, Vertex v3, ColorDbl _color, Direction _normalDirection);
+    Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color, glm::vec3 _normalDirection);
     
     ~Triangle();
 
-    void rayIntersection(Ray ray);
+    double rayIntersection(Ray* ray);
+    ColorDbl color;
 
 private:
-    Vertex vertexList[3];
-    ColorDbl color;
-    Direction normalDirection;
+    glm::vec4 vertexList[3];
+    glm::vec3 normalDirection;
 };
