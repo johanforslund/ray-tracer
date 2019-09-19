@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Tetrahedron.hpp"
 
+
 Tetrahedron::Tetrahedron(Triangle* tri1, Triangle* tri2, Triangle* tri3, Triangle* tri4, ColorDbl _color) : Geometry(_color) {
     triangleList[0] = tri1;
     triangleList[1] = tri2;
@@ -12,13 +13,19 @@ Tetrahedron::~Tetrahedron() {
     // Clear triangleList
 }
 
-double Tetrahedron::rayIntersection(Ray* ray) {
-    double minT = 10000000;
+Intersection* Tetrahedron::rayIntersection(Ray* ray) {
+    Intersection* closestIntersection = nullptr;
 
     for (int i=0; i<4; i++) {
-        double t = triangleList[i]->rayIntersection(ray);
-        if (t < minT && t >= 0) minT = t;
+        Intersection* intersection = triangleList[i]->rayIntersection(ray);
+        if (closestIntersection == nullptr && intersection != nullptr) {
+            closestIntersection = intersection;
+        }
+        else if (intersection != nullptr && closestIntersection != nullptr && 
+                intersection->t < closestIntersection->t && intersection->t >= 0) {
+            closestIntersection = intersection;
+        } 
     }
-    return minT;
+    return closestIntersection;
 }
  

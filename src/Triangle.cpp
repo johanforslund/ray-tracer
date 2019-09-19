@@ -13,7 +13,7 @@ Triangle::~Triangle() {
 
 }
 
-double Triangle::rayIntersection(Ray* ray) {
+Intersection* Triangle::rayIntersection(Ray* ray) {
     // if (glm::dot(glm::vec3((ray->end - ray->start)), normalDirection) > 0) return -1; // Could maybe not work
     
     glm::vec3 T = ray->start - vertexList[0];
@@ -27,9 +27,9 @@ double Triangle::rayIntersection(Ray* ray) {
     float u = (glm::dot(P, T))/(glm::dot(P, E1));
     float v = (glm::dot(Q, D))/(glm::dot(P, E1));
 
-    if (u + v > 1 || v < 0 || u < 0) return -1;
+    if (u + v > 1 || v < 0 || u < 0) return nullptr;
 
-    return t;
+    return new Intersection(t, this, glm::vec4(2,2,2,1));
     
     glm::vec3 intersectionPoint = ray->start + t*(ray->end - ray->start);
 

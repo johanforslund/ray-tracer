@@ -3,6 +3,7 @@
 #include "Tetrahedron.hpp"
 #include "Ray.hpp"
 #include <vector>
+#include "Intersection.hpp"
 
 class Scene {
 

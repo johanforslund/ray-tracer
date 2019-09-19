@@ -33,7 +33,7 @@ Scene::Scene() {
     Triangle* tri2 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(5, 0, -3, 1), glm::vec4(9, -2, -3, 1), ColorDbl(1, 1, 1));
     Triangle* tri3 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, -2, -3, 1), glm::vec4(9, 2, -3, 1), ColorDbl(1, 1, 1));
     Triangle* tri4 = new Triangle(glm::vec4(9, 2, -3, 1), glm::vec4(9, -2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(1, 1, 1));
-    geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, ColorDbl(0.7, 0.3, 0.6))); //New obj
+    //geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, ColorDbl(0.7, 0.3, 0.6)));
     /****************************/
 
 }
@@ -43,16 +43,20 @@ Scene::~Scene() {
 }
 
 void Scene::getIntersection(Ray* ray) {
-    double minT = 10000000;
-    int minIndex = -1;
+    Intersection* closestIntersection;
     for (int i=0; i<geometryList.size(); i++) {
-        double t = geometryList[i]->rayIntersection(ray);
+        Intersection* intersection = geometryList[i]->rayIntersection(ray);
         //std::cout << t << std::endl;
-        if (t < minT && t > 0) {
-            minT = t;
-            minIndex = i;
-        }
-    }
+        //if (intersection != nullptr) std::cout << intersection->t << std::endl;
 
-    if (minIndex >= 0) ray->color = geometryList[minIndex]->color;
+        if (closestIntersection == nullptr && intersection != nullptr) {
+            closestIntersection = intersection;
+        }
+        else if (intersection != nullptr && closestIntersection != nullptr && 
+                intersection->t < closestIntersection->t && intersection->t > 0) {
+            closestIntersection = intersection;
+        } 
+    }
+   //std::cout << closestIntersection->t << std::endl;
+    if (closestIntersection != nullptr && closestIntersection->geometry != nullptr) std::cout << closestIntersection->geometry << std::endl;
 }

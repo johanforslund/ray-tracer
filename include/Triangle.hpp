@@ -3,6 +3,7 @@
 #include "Ray.hpp"
 #include <glm/glm.hpp>
 #include "Geometry.hpp"
+#include "Intersection.hpp"
 
 class Triangle : public Geometry{
 
@@ -11,7 +12,7 @@ public:
     
     ~Triangle();
 
-    double rayIntersection(Ray* ray);
+    Intersection* rayIntersection(Ray* ray);
 
 private:
     glm::vec4 vertexList[3];
