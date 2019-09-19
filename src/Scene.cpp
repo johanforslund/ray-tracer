@@ -23,7 +23,7 @@ Scene::Scene() {
     triangleList.push_back(Triangle(glm::vec4(0,6,5,1),glm::vec4(0,6,-5,1),glm::vec4(10,6,-5,1),ColorDbl(0,1,0),(glm::vec3(0,-1,0)))); // Back t17
     triangleList.push_back(Triangle(glm::vec4(10,6,-5,1),glm::vec4(0,6,5,1),glm::vec4(10,6,5,1),ColorDbl(0,1,0),(glm::vec3(0,-1,0)))); // Back t18
     triangleList.push_back(Triangle(glm::vec4(10,6,5,1),glm::vec4(10,6,-5,1),glm::vec4(13,0,-5,1),ColorDbl(0,1,0),(glm::normalize(glm::vec3(-2,-1,0))))); // Back t19
-    triangleList.push_back(Triangle(glm::vec4(13,0,5,1),glm::vec4(10,6,5,1),glm::vec4(13,0,-5,1),ColorDbl(0,1,0),(glm::normalize(glm::vec3(-2,-1,0))))); // Back t20
+    triangleList.push_back(Triangle(glm::vec4(13,0,5,1),glm::vec4(10,6,5,1),glm::vec4(13,0,-5,1),ColorDbl(0,1,1),(glm::normalize(glm::vec3(-2,-1,0))))); // Back t20
 }
 
 Scene::~Scene() {

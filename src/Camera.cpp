@@ -3,7 +3,7 @@
 #include <math.h>
 
 Camera::Camera() {
-    eye1 = glm::vec3(-0.5,0,0);
+    eye1 = glm::vec3(-1,0,0);
     eye2 = glm::vec3(-2,0,0);
 
     farEye = false;

@@ -28,6 +28,12 @@ double Triangle::rayIntersection(Ray* ray) {
     glm::vec3 Q = glm::cross(T, E1);
 
     float t = (glm::dot(Q, E2))/(glm::dot(P, E1));
+    float u = (glm::dot(P, T))/(glm::dot(P, E1));
+    float v = (glm::dot(Q, D))/(glm::dot(P, E1));
+
+    if (u >= 1 || u < 0) return -1;
+    if (u + v >= 1 || v < 0) return -1;
+
     return t;
     
     glm::vec3 intersectionPoint = ray->start + t*(ray->end - ray->start);
