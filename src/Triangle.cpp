@@ -20,7 +20,7 @@ Triangle::~Triangle() {
 
 double Triangle::rayIntersection(Ray* ray) {
     // if (glm::dot(glm::vec3((ray->end - ray->start)), normalDirection) > 0) return -1; // Could maybe not work
-
+    
     glm::vec3 T = ray->start - vertexList[0];
     glm::vec3 E1 = vertexList[1] - vertexList[0];
     glm::vec3 E2 = vertexList[2] - vertexList[0];

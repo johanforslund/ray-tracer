@@ -2,8 +2,9 @@
 #include "ColorDbl.hpp"
 #include "Ray.hpp"
 #include <glm/glm.hpp>
+#include "Geometry.hpp"
 
-class Triangle {
+class Triangle : public Geometry{
 
 public:
     Triangle();
@@ -13,7 +14,6 @@ public:
     ~Triangle();
 
     double rayIntersection(Ray* ray);
-    ColorDbl color;
 
 private:
     glm::vec4 vertexList[3];

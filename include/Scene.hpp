@@ -1,5 +1,6 @@
 #pragma once
 #include "Triangle.hpp"
+#include "Tetrahedron.hpp"
 #include "Ray.hpp"
 #include <vector>
 
@@ -12,5 +13,5 @@ public:
     void getIntersection(Ray* ray);
 
 private:
-    std::vector<Triangle> triangleList;
+    std::vector<Geometry*> geometryList;
 };
