@@ -1,15 +1,10 @@
 #include <iostream>
 #include "Triangle.hpp"
 
-Triangle::Triangle() {
-
-}
-
-Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color) {
+Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color) : Geometry(_color) {
     vertexList[0] = vertex1;
     vertexList[1] = vertex2;
     vertexList[2] = vertex3;
-    color = _color;
 
     normalDirection = glm::normalize(glm::cross(glm::vec3(vertexList[1] - vertexList[0]), glm::vec3(vertexList[2] - vertexList[0])));
 }

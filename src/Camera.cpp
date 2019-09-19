@@ -47,7 +47,7 @@ void Camera::createImage() {
     FILE *fp = fopen("images/image.ppm", "wb"); /* b - binary mode */
     (void) fprintf(fp, "P6\n%d %d\n255\n", 800, 800);
 
-    for (int j = 0; j < 800; j++) {
+    for (int j = 799; j >= 0; j--) {
         for (int i = 0; i < 800; i++ ) {
             static unsigned char color[3];
             color[0] = (pixels[i][j].ray->color.r * 255.99)/maxValue;  /* red */
