@@ -8,7 +8,7 @@ class Triangle {
 public:
     Triangle();
 
-    Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color, glm::vec3 _normalDirection);
+    Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color);
     
     ~Triangle();
 

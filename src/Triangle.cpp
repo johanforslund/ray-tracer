@@ -5,12 +5,13 @@ Triangle::Triangle() {
 
 }
 
-Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color, glm::vec3 _normalDirection) {
+Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color) {
     vertexList[0] = vertex1;
     vertexList[1] = vertex2;
     vertexList[2] = vertex3;
     color = _color;
-    normalDirection = _normalDirection;
+
+    normalDirection = glm::normalize(glm::cross(glm::vec3(vertexList[1] - vertexList[0]), glm::vec3(vertexList[2] - vertexList[0])));
 }
 
 Triangle::~Triangle() {
@@ -31,8 +32,7 @@ double Triangle::rayIntersection(Ray* ray) {
     float u = (glm::dot(P, T))/(glm::dot(P, E1));
     float v = (glm::dot(Q, D))/(glm::dot(P, E1));
 
-    if (u >= 1 || u < 0) return -1;
-    if (u + v >= 1 || v < 0) return -1;
+    if (u + v > 1 || v < 0 || u < 0) return -1;
 
     return t;
     
