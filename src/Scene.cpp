@@ -29,11 +29,11 @@ Scene::Scene() {
     /***************/
 
     /********TETRAHEDRON*********/
-    Triangle* tri1 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, 2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(1, 1, 1));
-    Triangle* tri2 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(5, 0, -3, 1), glm::vec4(9, -2, -3, 1), ColorDbl(1, 1, 1));
-    Triangle* tri3 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, -2, -3, 1), glm::vec4(9, 2, -3, 1), ColorDbl(1, 1, 1));
-    Triangle* tri4 = new Triangle(glm::vec4(9, 2, -3, 1), glm::vec4(9, -2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(1, 1, 1));
-    //geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, ColorDbl(0.7, 0.3, 0.6)));
+    Triangle* tri1 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, 2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(0.7, 0.5, 0.4));
+    Triangle* tri2 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(5, 0, -3, 1), glm::vec4(9, -2, -3, 1), ColorDbl(0.5, 0.9, 1));
+    Triangle* tri3 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, -2, -3, 1), glm::vec4(9, 2, -3, 1), ColorDbl(0.8, 0.5, 0.6));
+    Triangle* tri4 = new Triangle(glm::vec4(9, 2, -3, 1), glm::vec4(9, -2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(0.5, 0.5, 0.5));
+    geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, ColorDbl(0.7, 0.3, 0.6)));
     /****************************/
 
 }
@@ -43,13 +43,13 @@ Scene::~Scene() {
 }
 
 void Scene::getIntersection(Ray* ray) {
-    Intersection* closestIntersection;
+    Intersection* closestIntersection = nullptr;
     for (int i=0; i<geometryList.size(); i++) {
         Intersection* intersection = geometryList[i]->rayIntersection(ray);
         //std::cout << t << std::endl;
         //if (intersection != nullptr) std::cout << intersection->t << std::endl;
 
-        if (closestIntersection == nullptr && intersection != nullptr) {
+        if (closestIntersection == nullptr && intersection != nullptr && intersection->t > 0) {
             closestIntersection = intersection;
         }
         else if (intersection != nullptr && closestIntersection != nullptr && 
@@ -57,6 +57,8 @@ void Scene::getIntersection(Ray* ray) {
             closestIntersection = intersection;
         } 
     }
+
+    //std::cout << closestIntersection->t << std::endl;
    //std::cout << closestIntersection->t << std::endl;
-    if (closestIntersection != nullptr && closestIntersection->geometry != nullptr) std::cout << closestIntersection->geometry << std::endl;
+    if (closestIntersection != nullptr && closestIntersection->geometry != nullptr) ray->color = closestIntersection->geometry->color;
 }
