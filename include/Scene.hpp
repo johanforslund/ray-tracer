@@ -1,6 +1,7 @@
 #pragma once
 #include "Triangle.hpp"
 #include "Tetrahedron.hpp"
+#include "Sphere.hpp"
 #include "Ray.hpp"
 #include <vector>
 #include "Intersection.hpp"

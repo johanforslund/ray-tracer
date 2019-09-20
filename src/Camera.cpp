@@ -48,7 +48,7 @@ void Camera::createImage() {
     (void) fprintf(fp, "P6\n%d %d\n255\n", 800, 800);
 
     for (int j = 799; j >= 0; j--) {
-        for (int i = 0; i < 800; i++ ) {
+        for (int i = 799; i >= 0; i-- ) {
             static unsigned char color[3];
             color[0] = (pixels[i][j].ray->color.r * 255.99)/maxValue;  /* red */
             color[1] = (pixels[i][j].ray->color.g * 255.99)/maxValue;  /* green */

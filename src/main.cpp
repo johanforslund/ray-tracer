@@ -16,5 +16,5 @@ int main() {
 
     camera.createImage();
 
-    std::cout << "Hello Easy C++ project!" << std::endl;
+    std::cout << "Reached end!" << std::endl;
 }

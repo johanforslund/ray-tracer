@@ -3,10 +3,10 @@
 
 Scene::Scene() {
     /******ROOM*******/
-    geometryList.push_back(new Triangle(glm::vec4(-3, 0, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(0, -6, 5, 1), ColorDbl(1, 0, 1))); //Roof 1
-    geometryList.push_back(new Triangle(glm::vec4(0, -6, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(10, -6, 5, 1), ColorDbl(1, 0, 1))); //Roof 2
-    geometryList.push_back(new Triangle(glm::vec4(10, -6, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(10, 6, 5, 1), ColorDbl(1, 0, 1))); //Roof 3
-    geometryList.push_back(new Triangle(glm::vec4(10, 6, 5, 1), glm::vec4(13, 0, 5, 1), glm::vec4(10, -6, 5, 1), ColorDbl(1, 0, 1))); //Roof 4
+    geometryList.push_back(new Triangle(glm::vec4(-3, 0, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(0, -6, 5, 1), ColorDbl(1, 1, 1))); //Roof 1
+    geometryList.push_back(new Triangle(glm::vec4(0, -6, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(10, -6, 5, 1), ColorDbl(1, 1, 1))); //Roof 2
+    geometryList.push_back(new Triangle(glm::vec4(10, -6, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(10, 6, 5, 1), ColorDbl(1, 1, 1))); //Roof 3
+    geometryList.push_back(new Triangle(glm::vec4(10, 6, 5, 1), glm::vec4(13, 0, 5, 1), glm::vec4(10, -6, 5, 1), ColorDbl(1, 1, 1))); //Roof 4
 
     geometryList.push_back(new Triangle(glm::vec4(-3, 0, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(0, 6, -5, 1), ColorDbl(1, 1, 1))); //Floor 5
     geometryList.push_back(new Triangle(glm::vec4(0, 6, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(10, -6, -5, 1), ColorDbl(1, 1, 1))); //Floor 6
@@ -29,11 +29,15 @@ Scene::Scene() {
     /***************/
 
     /********TETRAHEDRON*********/
-    Triangle* tri1 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, 2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(0.7, 0.5, 0.4));
-    Triangle* tri2 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(5, 0, -3, 1), glm::vec4(9, -2, -3, 1), ColorDbl(0.5, 0.9, 1));
-    Triangle* tri3 = new Triangle(glm::vec4(7, 0, 0, 1), glm::vec4(9, -2, -3, 1), glm::vec4(9, 2, -3, 1), ColorDbl(0.8, 0.5, 0.6));
-    Triangle* tri4 = new Triangle(glm::vec4(9, 2, -3, 1), glm::vec4(9, -2, -3, 1), glm::vec4(5, 0, -3, 1), ColorDbl(0.5, 0.5, 0.5));
+    Triangle* tri1 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(9, 4, -3, 1), glm::vec4(5, 1, -1, 1), ColorDbl(0.9, 0.9, 0.1));
+    Triangle* tri2 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(5, 1, -1, 1), glm::vec4(9, 0, -3, 1), ColorDbl(0.1, 0.9, 0.1));
+    Triangle* tri3 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(9, 0, -3, 1), glm::vec4(9, 4, -3, 1), ColorDbl(0.1, 0.9, 0.8));
+    Triangle* tri4 = new Triangle(glm::vec4(9, 4, -3, 1), glm::vec4(9, 0, -3, 1), glm::vec4(5, 1, -1, 1), ColorDbl(0.8, 0.2, 0.2));
     geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, ColorDbl(0.7, 0.3, 0.6)));
+    /****************************/
+
+    /********SPHERE*********/
+    geometryList.push_back(new Sphere(glm::vec4(5, -2, -2, 1), 2, ColorDbl(0.5, 0.5, 0.5)));
     /****************************/
 
 }
