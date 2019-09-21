@@ -6,12 +6,12 @@ class Intersection;
 class Geometry {
 
 public:
-    Geometry( ColorDbl _color ) : color(_color){}
+    Geometry( Color _color ) : color(_color){}
     virtual ~Geometry() = default;
 
     virtual Intersection* rayIntersection(Ray* ray) = 0;
 
-    ColorDbl color;
+    Color color;
 private:
     
 };

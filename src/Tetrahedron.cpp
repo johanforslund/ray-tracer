@@ -2,7 +2,7 @@
 #include "Tetrahedron.hpp"
 
 
-Tetrahedron::Tetrahedron(Triangle* tri1, Triangle* tri2, Triangle* tri3, Triangle* tri4, ColorDbl _color) : Geometry(_color) {
+Tetrahedron::Tetrahedron(Triangle* tri1, Triangle* tri2, Triangle* tri3, Triangle* tri4, Color _color) : Geometry(_color) {
     triangleList[0] = tri1;
     triangleList[1] = tri2;
     triangleList[2] = tri3;

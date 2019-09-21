@@ -1,5 +1,5 @@
 #pragma once
-#include "ColorDbl.hpp"
+#include "Color.hpp"
 #include <glm/glm.hpp>
 
 class Triangle;
@@ -12,7 +12,7 @@ public:
     ~Ray();
 
     glm::vec4 start, end;
-    ColorDbl color;
+    Color color;
 private:
     Triangle* endTriangle;
 };

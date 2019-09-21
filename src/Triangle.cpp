@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Triangle.hpp"
 
-Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, ColorDbl _color) : Geometry(_color) {
+Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, Color _color) : Geometry(_color) {
     vertexList[0] = vertex1;
     vertexList[1] = vertex2;
     vertexList[2] = vertex3;
@@ -29,11 +29,7 @@ Intersection* Triangle::rayIntersection(Ray* ray) {
 
     if (u + v > 1 || v < 0 || u < 0) return nullptr;
 
-    return new Intersection(t, this, glm::vec4(2,2,2,1));
-    
-    glm::vec3 intersectionPoint = ray->start + t*(ray->end - ray->start);
+    glm::vec4 intersectionPoint = ray->start + t*(ray->end - ray->start);
 
-    std::cout << intersectionPoint[0] << " " << intersectionPoint[1] << " " << intersectionPoint[2] << std::endl;
-
-    ray->color = color;
+    return new Intersection(t, this, intersectionPoint, normalDirection);
 }

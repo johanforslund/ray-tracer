@@ -15,7 +15,7 @@ Camera::Camera() {
 
     for (int i=0; i<800; i++) {
         for (int j=0; j<800; j++) {
-            pixels[i][j] = Pixel(ColorDbl(rand() % 255, rand() % 255, rand() % 255)); // Test pixels
+            pixels[i][j] = Pixel(Color(rand() % 255, rand() % 255, rand() % 255)); // Test pixels
         }
     }
 }
@@ -34,7 +34,7 @@ void Camera::render() {
 }
 
 void Camera::createImage() {
-    double maxValue = 0;
+    float maxValue = 0;
     // Find max in matrix
     for (int i = 0; i < 800; i++) {
         for (int j = 0; j < 800; j++ ) {

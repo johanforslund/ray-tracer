@@ -5,10 +5,11 @@
 class Intersection {
 
 public:
-    Intersection(double _t, Geometry* _geometry, glm::vec4 _point);
+    Intersection(float _t, Geometry* _geometry, glm::vec4 _point, glm::vec3 _normal);
     ~Intersection();
 
-    double t;
+    glm::vec3 normal;
+    float t;
     Geometry* geometry; 
     glm::vec4 point;
 };

@@ -1,14 +1,14 @@
 #pragma once
-#include "ColorDbl.hpp"
+#include "Color.hpp"
 #include "Ray.hpp"
 
 class Pixel {
 
 public:
     Pixel();
-    Pixel(ColorDbl _color);
+    Pixel(Color _color);
     ~Pixel();
 
-    ColorDbl color;
+    Color color;
     Ray* ray;
 };

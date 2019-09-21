@@ -4,6 +4,7 @@
 #include "Sphere.hpp"
 #include "Ray.hpp"
 #include <vector>
+#include <math.h>
 #include "Intersection.hpp"
 
 class Scene {

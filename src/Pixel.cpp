@@ -4,7 +4,7 @@ Pixel::Pixel() {
 
 }
 
-Pixel::Pixel(ColorDbl _color) {
+Pixel::Pixel(Color _color) {
     color = _color;
 }
 
