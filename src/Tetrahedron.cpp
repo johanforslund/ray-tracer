@@ -28,4 +28,7 @@ Intersection* Tetrahedron::rayIntersection(Ray* ray) {
     }
     return closestIntersection;
 }
- 
+
+std::string Tetrahedron::getName() {
+    return "Tetrahedron";
+}

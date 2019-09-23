@@ -37,7 +37,7 @@ Scene::Scene() {
     /****************************/
 
     /********SPHERE*********/
-    geometryList.push_back(new Sphere(glm::vec4(7, 2, -5, 1), 2, Color(0, 1, 1)));
+    geometryList.push_back(new Sphere(glm::vec4(7, -3, 0, 1), 1, Color(0, 1, 1)));
     /****************************/
 }
 
@@ -45,30 +45,57 @@ Scene::~Scene() {
     
 }
 
-void Scene::getIntersection(Ray* ray) {
+Intersection* Scene::getIntersection(Ray* ray) {
     Intersection* closestIntersection = nullptr;
     for (int i=0; i<geometryList.size(); i++) {
         Intersection* intersection = geometryList[i]->rayIntersection(ray);
         //std::cout << t << std::endl;
         //if (intersection != nullptr) std::cout << intersection->t << std::endl;
 
-        if (closestIntersection == nullptr && intersection != nullptr && intersection->t > 0) {
+        if (closestIntersection == nullptr && intersection != nullptr) {
             closestIntersection = intersection;
         }
         else if (intersection != nullptr && closestIntersection != nullptr && 
-                intersection->t < closestIntersection->t && intersection->t > 0) {
+                intersection->t < closestIntersection->t) {
             closestIntersection = intersection;
         } 
     }
 
-    if (closestIntersection != nullptr && closestIntersection->geometry != nullptr) {
-        glm::vec3 shadowRay = glm::vec3(3,0,5) - glm::vec3(closestIntersection->point);
-        float kd = 1;
-        float inclinationAngle = acos(glm::dot(shadowRay, closestIntersection->normal)/glm::length(shadowRay)*glm::length(closestIntersection->normal));
+    return closestIntersection;
+}
 
-        float r = closestIntersection->geometry->color.r*kd*std::max(0.0f,cos(inclinationAngle));
-        float g = closestIntersection->geometry->color.g*kd*std::max(0.0f,cos(inclinationAngle));
-        float b = closestIntersection->geometry->color.b*kd*std::max(0.0f,cos(inclinationAngle));
+void Scene::colorizeRay(Ray* ray) {
+    glm::vec4 lightSource = glm::vec4(4,0,4.5, 1);
+    Intersection* closestIntersection = getIntersection(ray);
+    if (closestIntersection != nullptr) {
+        Ray* shadowRay = new Ray(closestIntersection->point, lightSource);
+
+        //std::cout << closestIntersection->point[0] << " " << closestIntersection->point[1] << " " << closestIntersection->point[2] << std::endl;
+
+        Intersection* shadowRayIntersection = getIntersection(shadowRay);
+
+        if (shadowRayIntersection->geometry->getName() == "Triangle") {
+            //std::cout << shadowRayIntersection->point[2] << ": " << shadowRayIntersection->t << std::endl;
+        }
+
+        float kd = 1;
+        float inclinationAngle = acos(glm::dot(shadowRay->getVec3(), closestIntersection->normal)/glm::length(shadowRay->getVec3())*glm::length(closestIntersection->normal));
+
+        float r, g, b;
+
+        //std::cout << shadowRayIntersection->t << std::endl;
+        if (glm::distance(glm::vec3(lightSource), glm::vec3(closestIntersection->point)) < glm::distance(glm::vec3(closestIntersection->point), glm::vec3(shadowRayIntersection->point))) {
+            //std::cout << shadowRayIntersection->point[2] << std::endl;
+            r = closestIntersection->geometry->color.r*kd*std::max(0.0f,cos(inclinationAngle));
+            g = closestIntersection->geometry->color.g*kd*std::max(0.0f,cos(inclinationAngle));
+            b = closestIntersection->geometry->color.b*kd*std::max(0.0f,cos(inclinationAngle));
+        } else {
+            //std::cout << shadowRayIntersection->t << std::endl;
+            //std::cout << "BALL: " << shadowRayIntersection->point[0] << " " << shadowRayIntersection->point[1] << " " << shadowRayIntersection->point[2] << std::endl;
+            r = 0;
+            g = 0;
+            b = 0;
+        }
 
         Color color = Color(r,g,b);
 

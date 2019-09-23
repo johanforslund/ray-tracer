@@ -2,6 +2,7 @@
 #include "Geometry.hpp"
 #include "Intersection.hpp"
 #include <iostream>
+#include <string>
 
 class Sphere : public Geometry {
 
@@ -10,6 +11,7 @@ public:
     ~Sphere();
 
     Intersection* rayIntersection(Ray* ray);
+    std::string getName();
 
 private:
     glm::vec4 centerPos;

@@ -14,7 +14,7 @@ Triangle::~Triangle() {
 }
 
 Intersection* Triangle::rayIntersection(Ray* ray) {
-    // if (glm::dot(glm::vec3((ray->end - ray->start)), normalDirection) > 0) return -1; // Could maybe not work
+    if (glm::dot(glm::vec3((ray->end - ray->start)), normalDirection) > 0) return nullptr; // Could maybe not work
     
     glm::vec3 T = ray->start - vertexList[0];
     glm::vec3 E1 = vertexList[1] - vertexList[0];
@@ -28,8 +28,13 @@ Intersection* Triangle::rayIntersection(Ray* ray) {
     float v = (glm::dot(Q, D))/(glm::dot(P, E1));
 
     if (u + v > 1 || v < 0 || u < 0) return nullptr;
+    if (t < 0) return nullptr;
 
-    glm::vec4 intersectionPoint = ray->start + t*(ray->end - ray->start);
+    glm::vec4 intersectionPoint = ray->start + t*glm::normalize(ray->end - ray->start);
 
     return new Intersection(t, this, intersectionPoint, normalDirection);
+}
+
+std::string Triangle::getName() {
+    return "Triangle";
 }

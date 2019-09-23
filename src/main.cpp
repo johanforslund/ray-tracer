@@ -10,7 +10,7 @@ int main() {
 
     for (int i =0; i<800; i++) {
         for (int j=0; j<800; j++) {
-            scene.getIntersection(camera.pixels[i][j].ray);
+            scene.colorizeRay(camera.pixels[i][j].ray);
         }
     }
 

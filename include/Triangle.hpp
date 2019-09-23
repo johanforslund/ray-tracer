@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "Geometry.hpp"
 #include "Intersection.hpp"
+#include <string>
 
 class Triangle : public Geometry{
 
@@ -13,6 +14,7 @@ public:
     ~Triangle();
 
     Intersection* rayIntersection(Ray* ray);
+    std::string getName();
 
 private:
     glm::vec4 vertexList[3];

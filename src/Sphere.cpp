@@ -10,6 +10,7 @@ Sphere::~Sphere() {
 }
 
 Intersection* Sphere::rayIntersection(Ray* ray) {
+    if (glm::dot(glm::vec3((ray->end - ray->start)), glm::vec3(ray->start - centerPos)) > 0) return nullptr; // Could maybe not work
     glm::vec4 l = glm::normalize(ray->end - ray->start);
     float b = glm::dot(2.0f*l, ray->start-centerPos);
     float c = glm::dot(ray->start - centerPos, ray->start - centerPos) - pow(radius, 2);
@@ -24,9 +25,15 @@ Intersection* Sphere::rayIntersection(Ray* ray) {
     else if (d2 > 0) t = d2;
     else t = d1;
 
+    if (t < 0) return nullptr;
+
     glm::vec4 intersectionPoint = ray->start + t*(glm::normalize(ray->end - ray->start));
 
     glm::vec3 normal = glm::normalize(intersectionPoint - centerPos);
 
     return new Intersection(t, this, intersectionPoint, normal);
+}
+
+std::string Sphere::getName() {
+    return "Sphere";
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Ray.hpp"
+#include <string>
 
 class Intersection;
 
@@ -10,6 +11,7 @@ public:
     virtual ~Geometry() = default;
 
     virtual Intersection* rayIntersection(Ray* ray) = 0;
+    virtual std::string getName() = 0;
 
     Color color;
 private:

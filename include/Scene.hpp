@@ -13,7 +13,8 @@ public:
     Scene();
     ~Scene();
 
-    void getIntersection(Ray* ray);
+    Intersection* getIntersection(Ray* ray);
+    void colorizeRay(Ray* ray);
 
 private:
     std::vector<Geometry*> geometryList;

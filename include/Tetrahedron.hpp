@@ -4,6 +4,7 @@
 #include "Color.hpp"
 #include "Triangle.hpp"
 #include "Intersection.hpp"
+#include <string>
 
 
 class Tetrahedron : public Geometry{
@@ -13,6 +14,7 @@ public:
     ~Tetrahedron();
 
     Intersection* rayIntersection(Ray* ray);
+    std::string getName();
 
 private:
     Triangle* triangleList[4];
