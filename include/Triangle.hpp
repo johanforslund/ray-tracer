@@ -2,9 +2,11 @@
 #include "Color.hpp"
 #include "Ray.hpp"
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "Geometry.hpp"
 #include "Intersection.hpp"
 #include <string>
+
 
 class Triangle : public Geometry{
 
@@ -15,6 +17,8 @@ public:
 
     Intersection* rayIntersection(Ray* ray);
     std::string getName();
+    void translate(float x, float y, float z);
+
 
 private:
     glm::vec4 vertexList[3];

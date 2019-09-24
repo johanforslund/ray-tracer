@@ -9,6 +9,7 @@ Scene::Scene() {
     Color red = Color(1,0,0);
     Color turquoise = Color(0,1,1);
     Color yellow = Color(1,1,0);
+    Color pink = Color(1,0.41,0.71);
 
     /*********************/
 
@@ -18,6 +19,7 @@ Scene::Scene() {
     DiffuseMaterial* backWallMaterial = new DiffuseMaterial(red);
     MirrorMaterial* sphereMaterial = new MirrorMaterial(turquoise, 0.8);
     MirrorMaterial* tetraMaterial = new MirrorMaterial(yellow, 0.8);
+    DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink);
 
     /*********************/
 
@@ -48,15 +50,20 @@ Scene::Scene() {
     /***************/
 
     /********TETRAHEDRON*********/
-    Triangle* tri1 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(9, 4, -3, 1), glm::vec4(5, 1, -1, 1), tetraMaterial);
-    Triangle* tri2 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(5, 1, -1, 1), glm::vec4(9, 0, -3, 1), tetraMaterial);
-    Triangle* tri3 = new Triangle(glm::vec4(7, 2, 0, 1), glm::vec4(9, 0, -3, 1), glm::vec4(9, 4, -3, 1), tetraMaterial);
-    Triangle* tri4 = new Triangle(glm::vec4(9, 4, -3, 1), glm::vec4(9, 0, -3, 1), glm::vec4(5, 1, -1, 1), tetraMaterial);
-    geometryList.push_back(new Tetrahedron(tri1, tri2, tri3, tri4, nullptr));
+    Triangle* tri1 = new Triangle(glm::vec4(0, 0, 2, 1), glm::vec4(2, 2, -2, 1), glm::vec4(-2, 0, -2, 1), tetraMaterial);
+    Triangle* tri2 = new Triangle(glm::vec4(0, 0, 2, 1), glm::vec4(-2, 0, -2, 1), glm::vec4(2, -2, -2, 1), tetraMaterial);
+    Triangle* tri3 = new Triangle(glm::vec4(0, 0, 2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(2, 2, -2, 1), tetraMaterial);
+    Triangle* tri4 = new Triangle(glm::vec4(2, 2, -2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(-2, 0, -2, 1), tetraMaterial);
+
+    Tetrahedron* tetrahedron = new Tetrahedron(tri1, tri2, tri3, tri4, nullptr);
+    tetrahedron->translate(4,2,-1);
+    geometryList.push_back(tetrahedron);
     /****************************/
 
     /********SPHERE*********/
-    geometryList.push_back(new Sphere(glm::vec4(7, -3, 0, 1), 1, sphereMaterial));
+    Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, sphereMaterial);
+    sphere->translate(4,-2,0);
+    geometryList.push_back(sphere);
     /****************************/
 }
 
@@ -83,41 +90,48 @@ Intersection* Scene::getIntersection(Ray* ray) {
     return closestIntersection;
 }
 
-void Scene::colorizeRay(Ray* ray) {
+glm::vec3 Scene::traceRay(Ray* ray) {
     glm::vec4 lightSource = glm::vec4(4,0,4.5, 1);
     Intersection* closestIntersection = getIntersection(ray);
-    if (closestIntersection != nullptr) {
-        Ray* shadowRay = new Ray(closestIntersection->point, lightSource, nullptr);
+    if (closestIntersection == nullptr) return glm::vec3(0,0,0); // Bug pixel
 
-        //std::cout << closestIntersection->point[0] << " " << closestIntersection->point[1] << " " << closestIntersection->point[2] << std::endl;
+    Ray* shadowRay = new Ray(closestIntersection->point, lightSource, nullptr);
 
-        Intersection* shadowRayIntersection = getIntersection(shadowRay);
+    Intersection* shadowRayIntersection = getIntersection(shadowRay);
 
-        if (shadowRayIntersection->geometry->getName() == "Triangle") {
-            //std::cout << shadowRayIntersection->point[2] << ": " << shadowRayIntersection->t << std::endl;
-        }
+    float kd = 1;
+    float inclinationAngle = acos(glm::dot(shadowRay->getVec3(), closestIntersection->normal)/glm::length(shadowRay->getVec3())*glm::length(closestIntersection->normal));
 
-        float kd = 1;
-        float inclinationAngle = acos(glm::dot(shadowRay->getVec3(), closestIntersection->normal)/glm::length(shadowRay->getVec3())*glm::length(closestIntersection->normal));
+    float r, g, b;
 
-        float r, g, b;
-
-        //std::cout << shadowRayIntersection->t << std::endl;
-        if (glm::distance(glm::vec3(lightSource), glm::vec3(closestIntersection->point)) < glm::distance(glm::vec3(closestIntersection->point), glm::vec3(shadowRayIntersection->point))) {
-            //std::cout << shadowRayIntersection->point[2] << std::endl;
-            r = closestIntersection->geometry->material->color.r*kd*std::max(0.0f,cos(inclinationAngle));
-            g = closestIntersection->geometry->material->color.g*kd*std::max(0.0f,cos(inclinationAngle));
-            b = closestIntersection->geometry->material->color.b*kd*std::max(0.0f,cos(inclinationAngle));
-        } else {
-            //std::cout << shadowRayIntersection->t << std::endl;
-            //std::cout << "BALL: " << shadowRayIntersection->point[0] << " " << shadowRayIntersection->point[1] << " " << shadowRayIntersection->point[2] << std::endl;
-            r = 0;
-            g = 0;
-            b = 0;
-        }
-
-        Color color = Color(r,g,b);
-
-        ray->color = color;
+    if (glm::distance(glm::vec3(lightSource), glm::vec3(closestIntersection->point)) < glm::distance(glm::vec3(closestIntersection->point), glm::vec3(shadowRayIntersection->point))) {
+        r = closestIntersection->geometry->material->color.r*kd*std::max(0.0f,cos(inclinationAngle));
+        g = closestIntersection->geometry->material->color.g*kd*std::max(0.0f,cos(inclinationAngle));
+        b = closestIntersection->geometry->material->color.b*kd*std::max(0.0f,cos(inclinationAngle));
+    } else {
+        r = 0;
+        g = 0;
+        b = 0;
     }
+
+    if (closestIntersection->geometry->material->getMaterialType() == "Diffuse") {
+        return glm::vec3(r,g,b);
+    }
+
+    if (closestIntersection->geometry->material->getMaterialType() == "Mirror") { 
+        MirrorMaterial* intersectionMaterial = (MirrorMaterial*)closestIntersection->geometry->material;
+
+        glm::vec3 reflectedVector = ray->getVec3() - 2*(glm::dot(ray->getVec3(),closestIntersection->normal))*closestIntersection->normal;
+
+        Ray* reflectedRay = new Ray(closestIntersection->point, glm::vec4(reflectedVector, 1)+closestIntersection->point, ray, intersectionMaterial->absorption*ray->importance);
+
+        return (reflectedRay->importance*traceRay(reflectedRay))/ray->importance; // plus transmitted ray
+    }
+
+    if (closestIntersection->geometry->material->getMaterialType() == "Transparent") {
+
+
+        //return rayR->importnace*colorizeRay(rayR) + colorizeRay(RayT);
+    }
+    
 }

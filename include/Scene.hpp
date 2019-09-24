@@ -17,7 +17,7 @@ public:
     ~Scene();
 
     Intersection* getIntersection(Ray* ray);
-    void colorizeRay(Ray* ray);
+    glm::vec3 traceRay(Ray* ray);
 
 private:
     std::vector<Geometry*> geometryList;

@@ -14,6 +14,8 @@ public:
 
     Intersection* rayIntersection(Ray* ray);
     std::string getName();
+    void translate(float x, float y, float z);
+
 
 private:
     Triangle* triangleList[4];

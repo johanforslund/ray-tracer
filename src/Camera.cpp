@@ -27,7 +27,7 @@ Camera::~Camera() {
 void Camera::render() {
     for (int i=0; i<800; i++) {
         for (int j=0; j<800; j++) {
-            Ray* ray = new Ray(glm::vec4(eye1, 1), glm::vec4(0, i*0.0025-0.99875, j*0.0025-0.99875, 1), nullptr);
+            Ray* ray = new Ray(glm::vec4(eye1, 1), glm::vec4(0, i*0.0025-0.99875, j*0.0025-0.99875, 1), nullptr, 1);
             pixels[i][j].ray = ray;
         }
     }
@@ -38,9 +38,9 @@ void Camera::createImage() {
     // Find max in matrix
     for (int i = 0; i < 800; i++) {
         for (int j = 0; j < 800; j++ ) {
-            if (pixels[i][j].ray->color.r > maxValue) maxValue = pixels[i][j].ray->color.r;
-            if (pixels[i][j].ray->color.g > maxValue) maxValue = pixels[i][j].ray->color.g;
-            if (pixels[i][j].ray->color.b > maxValue) maxValue = pixels[i][j].ray->color.b;
+            if (pixels[i][j].color.r > maxValue) maxValue = pixels[i][j].color.r;
+            if (pixels[i][j].color.g > maxValue) maxValue = pixels[i][j].color.g;
+            if (pixels[i][j].color.b > maxValue) maxValue = pixels[i][j].color.b;
         }
     }
 
@@ -50,9 +50,9 @@ void Camera::createImage() {
     for (int j = 799; j >= 0; j--) {
         for (int i = 799; i >= 0; i-- ) {
             static unsigned char color[3];
-            color[0] = (pixels[i][j].ray->color.r * 255.99)/maxValue;  /* red */
-            color[1] = (pixels[i][j].ray->color.g * 255.99)/maxValue;  /* green */
-            color[2] = (pixels[i][j].ray->color.b * 255.99)/maxValue;  /* blue */
+            color[0] = (pixels[i][j].color.r * 255.99)/maxValue;  /* red */
+            color[1] = (pixels[i][j].color.g * 255.99)/maxValue;  /* green */
+            color[2] = (pixels[i][j].color.b * 255.99)/maxValue;  /* blue */
             (void) fwrite(color, 1, 3, fp);
         }
     }

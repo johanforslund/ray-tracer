@@ -4,10 +4,11 @@ Ray::Ray() {
 
 }
 
-Ray::Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent) {
+Ray::Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, float _importance) {
     start = _start;
     end = _end;
     parent = _parent;
+    importance = _importance;
 }
 
 Ray::~Ray() {

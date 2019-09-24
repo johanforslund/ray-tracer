@@ -38,3 +38,13 @@ Intersection* Triangle::rayIntersection(Ray* ray) {
 std::string Triangle::getName() {
     return "Triangle";
 }
+
+void Triangle::translate(float x, float y, float z) {
+    glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x,y,z));
+    vertexList[0] = translationMatrix*vertexList[0];
+    vertexList[1] = translationMatrix*vertexList[1];
+    vertexList[2] = translationMatrix*vertexList[2];
+
+
+}
+ 

@@ -32,3 +32,10 @@ Intersection* Tetrahedron::rayIntersection(Ray* ray) {
 std::string Tetrahedron::getName() {
     return "Tetrahedron";
 }
+
+void Tetrahedron::translate(float x, float y, float z) {
+    triangleList[0]->translate(x,y,z);
+    triangleList[1]->translate(x,y,z);
+    triangleList[2]->translate(x,y,z);
+    triangleList[3]->translate(x,y,z);
+}
