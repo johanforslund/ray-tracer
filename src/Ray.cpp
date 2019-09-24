@@ -4,9 +4,10 @@ Ray::Ray() {
 
 }
 
-Ray::Ray(glm::vec4 _start, glm::vec4 _end) {
+Ray::Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent) {
     start = _start;
     end = _end;
+    parent = _parent;
 }
 
 Ray::~Ray() {

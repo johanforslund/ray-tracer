@@ -3,6 +3,9 @@
 #include "Tetrahedron.hpp"
 #include "Sphere.hpp"
 #include "Ray.hpp"
+#include "DiffuseMaterial.hpp"
+#include "MirrorMaterial.hpp"
+#include "TransparentMaterial.hpp"
 #include <vector>
 #include <math.h>
 #include "Intersection.hpp"

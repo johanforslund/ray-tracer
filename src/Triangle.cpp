@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Triangle.hpp"
 
-Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, Color _color) : Geometry(_color) {
+Triangle::Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, Material* _material) : Geometry(_material) {
     vertexList[0] = vertex1;
     vertexList[1] = vertex2;
     vertexList[2] = vertex3;

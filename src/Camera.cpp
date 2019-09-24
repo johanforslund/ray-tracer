@@ -27,7 +27,7 @@ Camera::~Camera() {
 void Camera::render() {
     for (int i=0; i<800; i++) {
         for (int j=0; j<800; j++) {
-            Ray* ray = new Ray(glm::vec4(eye1, 1), glm::vec4(0, i*0.0025-0.99875, j*0.0025-0.99875, 1));
+            Ray* ray = new Ray(glm::vec4(eye1, 1), glm::vec4(0, i*0.0025-0.99875, j*0.0025-0.99875, 1), nullptr);
             pixels[i][j].ray = ray;
         }
     }

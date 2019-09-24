@@ -9,7 +9,7 @@
 class Triangle : public Geometry{
 
 public:
-    Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, Color _color);
+    Triangle(glm::vec4 vertex1, glm::vec4 vertex2, glm::vec4 vertex3, Material* _material);
     
     ~Triangle();
 

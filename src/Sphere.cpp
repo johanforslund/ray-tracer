@@ -1,6 +1,6 @@
 #include "Sphere.hpp"
 
-Sphere::Sphere(glm::vec4 _centerPos, float _radius, Color _color) : Geometry(_color) {
+Sphere::Sphere(glm::vec4 _centerPos, float _radius, Material* _material) : Geometry(_material) {
     centerPos = _centerPos;
     radius = _radius;
 }
