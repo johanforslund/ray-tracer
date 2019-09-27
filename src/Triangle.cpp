@@ -44,7 +44,5 @@ void Triangle::translate(float x, float y, float z) {
     vertexList[0] = translationMatrix*vertexList[0];
     vertexList[1] = translationMatrix*vertexList[1];
     vertexList[2] = translationMatrix*vertexList[2];
-
-
 }
  

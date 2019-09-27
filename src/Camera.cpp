@@ -34,6 +34,8 @@ void Camera::render() {
 }
 
 void Camera::createImage() {
+    
+
     float maxValue = 0;
     // Find max in matrix
     for (int i = 0; i < 800; i++) {
