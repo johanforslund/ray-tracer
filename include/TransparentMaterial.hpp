@@ -5,11 +5,11 @@
 class TransparentMaterial : public Material{
 
 public:
-    virtual ~TransparentMaterial() = default;
+    ~TransparentMaterial();
 
     TransparentMaterial(Color _color, float _absorption, float _refractiveIndex);
 
-    virtual std::string getMaterialType() = 0;
+    virtual std::string getMaterialType();
 
     float refractiveIndex;
     float absorption;

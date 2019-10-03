@@ -20,6 +20,7 @@ Scene::Scene() {
     MirrorMaterial* sphereMaterial = new MirrorMaterial(turquoise, 0.8);
     MirrorMaterial* tetraMaterial = new MirrorMaterial(yellow, 0.8);
     DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink);
+    TransparentMaterial* transperantSpereMaterial = new TransparentMaterial(pink, 0.2, 0.6);
 
     /*********************/
 
@@ -57,12 +58,12 @@ Scene::Scene() {
 
     Tetrahedron* tetrahedron = new Tetrahedron(tri1, tri2, tri3, tri4, nullptr);
     tetrahedron->translate(4,2,-1);
-    geometryList.push_back(tetrahedron);
+    //geometryList.push_back(tetrahedron);
     /****************************/
 
     /********SPHERE*********/
-    Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, sphereMaterial);
-    sphere->translate(4,-2,0);
+    Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, transperantSpereMaterial);
+    sphere->translate(6,3,0);
     geometryList.push_back(sphere);
     /****************************/
 }
@@ -125,13 +126,38 @@ glm::vec3 Scene::traceRay(Ray* ray) {
 
         Ray* reflectedRay = new Ray(closestIntersection->point, glm::vec4(reflectedVector, 1)+closestIntersection->point, ray, intersectionMaterial->absorption*ray->importance);
 
-        return (reflectedRay->importance*traceRay(reflectedRay))/ray->importance; // plus transmitted ray
+        return (reflectedRay->importance*traceRay(reflectedRay))/ray->importance + 0.5f*glm::vec3(r,g,b);
     }
 
     if (closestIntersection->geometry->material->getMaterialType() == "Transparent") {
+        //std::cout << "En gång" << std::endl;
+        TransparentMaterial* intersectionMaterial = (TransparentMaterial*)closestIntersection->geometry->material;
+
+        glm::vec3 I = glm::normalize(ray->getVec3()); // Normalized incoming ray
+
+        float n1;
+        float n2;
+        if (glm::dot(I, closestIntersection->normal) < 0) {
+            n1 = intersectionMaterial->refractiveIndex;
+            n2 = 1.0f;
+        } else {
+            n1 = 1.0f;
+            n2 = intersectionMaterial->refractiveIndex;
+        }
+        
+        glm::vec3 reflectedVector = ray->getVec3() - 2*(glm::dot(ray->getVec3(),closestIntersection->normal))*closestIntersection->normal;
+        glm::vec3 refractedVector = (n1/n2) * I + closestIntersection->normal * (float)(-(n1/n2)*glm::dot(closestIntersection->normal,I) - sqrt(1 - pow(n1/n2,2)*(1 - pow(glm::dot(closestIntersection->normal,I),2)))); // Kolla parentes
+
+        Ray* reflectedRay = new Ray(closestIntersection->point, glm::vec4(reflectedVector, 1)+closestIntersection->point, ray, intersectionMaterial->absorption*ray->importance);
+        Ray* refractedRay = new Ray(closestIntersection->point+glm::vec4(refractedVector,1)*0.00001f, glm::vec4(refractedVector, 1)+closestIntersection->point, ray, intersectionMaterial->absorption*ray->importance); // Change
+
+        //std::cout << ray->start[0] << ray->start[1] << ray->start[2] << std::endl;
+        
+        Intersection* refractedRayIntersection = getIntersection(refractedRay);
+        std::cout << refractedRayIntersection->point[0] << refractedRayIntersection->point[1] << refractedRayIntersection->point[2] << std::endl;
 
 
-        //return rayR->importnace*colorizeRay(rayR) + colorizeRay(RayT);
+        return (refractedRay->importance*traceRay(refractedRay))/ray->importance + 0.5f*glm::vec3(r,g,b);
     }
     
 }
