@@ -17,7 +17,7 @@ public:
     ~Scene();
 
     Intersection* getIntersection(Ray* ray);
-    glm::vec3 traceRay(Ray* ray);
+    glm::vec3 traceRay(Ray* ray, int depth = 0);
 
 private:
     std::vector<Geometry*> geometryList;

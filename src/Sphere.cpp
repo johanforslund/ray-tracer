@@ -11,7 +11,7 @@ Sphere::~Sphere() {
 
 Intersection* Sphere::rayIntersection(Ray* ray) {
     glm::vec3 sphereNormal = glm::vec3(ray->start - centerPos);
-    if (glm::dot(ray->getVec3(), sphereNormal) > 0) return nullptr; // Could maybe not work
+    //if (!ray->isInObject && glm::dot(ray->getVec3(), sphereNormal) > 0) return nullptr; // Could maybe not work
     glm::vec3 l = glm::normalize(ray->getVec3());
     float b = glm::dot(2.0f*l, sphereNormal);
     float c = glm::dot(sphereNormal, sphereNormal) - pow(radius, 2);
@@ -32,6 +32,8 @@ Intersection* Sphere::rayIntersection(Ray* ray) {
     glm::vec4 intersectionPoint = ray->start + t*(glm::normalize(ray->end - ray->start));
 
     glm::vec3 normal = glm::normalize(intersectionPoint - centerPos);
+
+    if (!ray->isInObject && glm::dot(ray->getVec3(), normal) > 0) return nullptr; // Could maybe not work
 
     return new Intersection(t, this, intersectionPoint, normal);
 }

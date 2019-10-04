@@ -8,7 +8,7 @@ class Ray {
 
 public:
     Ray();
-    Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, float _importance = 0);
+    Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, bool _isInObject = false, float _importance = 0);
     ~Ray();
 
     glm::vec3 getVec3();
@@ -18,6 +18,7 @@ public:
     glm::vec4 start, end;
     Color color;
     float importance;
+    bool isInObject;
 private:
     Triangle* endTriangle;
 };

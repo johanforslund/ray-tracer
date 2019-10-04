@@ -4,10 +4,11 @@ Ray::Ray() {
 
 }
 
-Ray::Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, float _importance) {
+Ray::Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, bool _isInObject ,float _importance) {
     start = _start;
     end = _end;
     parent = _parent;
+    isInObject = _isInObject;
     importance = _importance;
 }
 
