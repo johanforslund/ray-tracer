@@ -32,6 +32,7 @@ Intersection* Sphere::rayIntersection(Ray* ray) {
     glm::vec4 intersectionPoint = ray->start + t*(glm::normalize(ray->end - ray->start));
 
     glm::vec3 normal = glm::normalize(intersectionPoint - centerPos);
+    if (ray->isInObject) normal = -normal; 
 
     if (!ray->isInObject && glm::dot(ray->getVec3(), normal) > 0) return nullptr; // Could maybe not work
 

@@ -20,7 +20,7 @@ Scene::Scene() {
     MirrorMaterial* sphereMaterial = new MirrorMaterial(turquoise, 0.8);
     MirrorMaterial* tetraMaterial = new MirrorMaterial(yellow, 0.8);
     DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink);
-    TransparentMaterial* transperantSpereMaterial = new TransparentMaterial(pink, 0.8, 1);
+    TransparentMaterial* transperantSpereMaterial = new TransparentMaterial(pink, 0.8, 1.5);
 
     /*********************/
 
@@ -30,10 +30,10 @@ Scene::Scene() {
     geometryList.push_back(new Triangle(glm::vec4(10, -6, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(10, 6, 5, 1), floorNRoofMaterial)); //Roof 3
     geometryList.push_back(new Triangle(glm::vec4(10, 6, 5, 1), glm::vec4(13, 0, 5, 1), glm::vec4(10, -6, 5, 1), floorNRoofMaterial)); //Roof 4
 
-    geometryList.push_back(new Triangle(glm::vec4(-3, 0, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(0, 6, -5, 1), floorNRoofMaterial)); //Floor 5
-    geometryList.push_back(new Triangle(glm::vec4(0, 6, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(10, -6, -5, 1), floorNRoofMaterial)); //Floor 6
-    geometryList.push_back(new Triangle(glm::vec4(10, -6, -5, 1), glm::vec4(10, 6, -5, 1), glm::vec4(0, 6, -5, 1), floorNRoofMaterial)); //Floor 7
-    geometryList.push_back(new Triangle(glm::vec4(10, 6, -5, 1), glm::vec4(10, -6, -5, 1), glm::vec4(13, 0, -5, 1), floorNRoofMaterial)); //Floor 8
+    geometryList.push_back(new Triangle(glm::vec4(-3, 0, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(0, 6, -5, 1), diffuseTetraMaterial)); //Floor 5
+    geometryList.push_back(new Triangle(glm::vec4(0, 6, -5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(10, -6, -5, 1), diffuseTetraMaterial)); //Floor 6
+    geometryList.push_back(new Triangle(glm::vec4(10, -6, -5, 1), glm::vec4(10, 6, -5, 1), glm::vec4(0, 6, -5, 1), diffuseTetraMaterial)); //Floor 7
+    geometryList.push_back(new Triangle(glm::vec4(10, 6, -5, 1), glm::vec4(10, -6, -5, 1), glm::vec4(13, 0, -5, 1), diffuseTetraMaterial)); //Floor 8
 
     geometryList.push_back(new Triangle(glm::vec4(-3, 0, 5, 1), glm::vec4(0, -6, -5, 1), glm::vec4(-3, 0, -5, 1), frontWallMaterial)); //Front 9
     geometryList.push_back(new Triangle(glm::vec4(-3, 0, 5, 1), glm::vec4(0, -6, 5, 1), glm::vec4(0, -6, -5, 1), frontWallMaterial)); //Front 10
@@ -67,7 +67,7 @@ Scene::Scene() {
 
     /********SPHERE*********/
     Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, transperantSpereMaterial);
-    sphere->translate(6,0,0);
+    sphere->translate(6,0.2,0);
     geometryList.push_back(sphere);
     /****************************/
 }
@@ -119,7 +119,6 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         b = 0;
     }
 
-    //std::cout << depth << std::endl;
     if (depth > 5) return glm::vec3(r,g,b);
 
     if (closestIntersection->geometry->material->getMaterialType() == "Diffuse") {
@@ -131,7 +130,7 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
 
         glm::vec3 reflectedVector = ray->getVec3() - 2*(glm::dot(ray->getVec3(),closestIntersection->normal))*closestIntersection->normal;
 
-        Ray* reflectedRay = new Ray(closestIntersection->point, glm::vec4(reflectedVector, 1)+closestIntersection->point, ray, intersectionMaterial->absorption*ray->importance);
+        Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector + glm::vec3(closestIntersection->point), ray, false, intersectionMaterial->absorption*ray->importance);
 
         return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + 0.5f*glm::vec3(r,g,b);
     }
@@ -152,22 +151,22 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
             n1 = intersectionMaterial->refractiveIndex;
             n2 = 1.0f;
         }
-        
+        float criticalAngle = asin(n2/n1);
+        float incomingAngle = acos((glm::dot(I,-N))/(glm::length(I)*glm::length(N)));
+
         glm::vec3 reflectedVector = ray->getVec3() - 2*(glm::dot(ray->getVec3(), N))*N;
+        Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance);
+
+        if (n1 > n2 && abs(incomingAngle) > abs(criticalAngle)) {
+            return glm::vec3(0,1,1); // Make reflected
+        }
+
         glm::vec3 transmittedVector = (n1/n2) * I + N * (float)(-(n1/n2)*glm::dot(N,I) - sqrt(1 - pow(n1/n2,2)*(1 - pow(glm::dot(N,I),2)))); 
         
-        //std::cout << transmittedVector[0] << " " << transmittedVector[1] << " " << transmittedVector[2] << std::endl;
-
-        Ray* reflectedRay = new Ray(closestIntersection->point, glm::vec4(reflectedVector, 1)+closestIntersection->point, ray, ray->isInObject, intersectionMaterial->absorption*ray->importance);
-        Ray* transmittedRay = new Ray(closestIntersection->point + glm::vec4(transmittedVector*0.001f,1), glm::vec4(transmittedVector, 1)+closestIntersection->point, ray, !ray->isInObject, intersectionMaterial->absorption*ray->importance); 
+        Ray* transmittedRay = new Ray(glm::vec3(closestIntersection->point) + transmittedVector*0.001f, transmittedVector + glm::vec3(closestIntersection->point), ray, !ray->isInObject, intersectionMaterial->absorption*ray->importance); 
 
         Intersection* transIntersection = getIntersection(transmittedRay);
-        if (ray->isInObject) {
-            std::cout << transIntersection->geometry->material->getMaterialType() << std::endl;
-        }
-        //std::cout << transmittedVector[0] << " " << transmittedVector[1] << " " <<transmittedVector[2] << std::endl;
-        //std::cout << transIntersection->geometry->material->getMaterialType() << std::endl;
-
+        
         return (transmittedRay->importance*traceRay(transmittedRay, depth+1))/ray->importance;
     }
     

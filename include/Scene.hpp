@@ -9,6 +9,7 @@
 #include <vector>
 #include <math.h>
 #include "Intersection.hpp"
+#include <glm/gtx/string_cast.hpp>
 
 class Scene {
 

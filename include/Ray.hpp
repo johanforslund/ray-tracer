@@ -8,7 +8,7 @@ class Ray {
 
 public:
     Ray();
-    Ray(glm::vec4 _start, glm::vec4 _end, Ray* _parent, bool _isInObject = false, float _importance = 0);
+    Ray(glm::vec3 _start, glm::vec3 _end, Ray* _parent, bool _isInObject = false, float _importance = 0);
     ~Ray();
 
     glm::vec3 getVec3();
