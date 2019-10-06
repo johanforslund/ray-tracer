@@ -21,7 +21,6 @@ Scene::Scene() {
     MirrorMaterial* tetraMaterial = new MirrorMaterial(yellow, 0.8);
     DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink);
     TransparentMaterial* transperantSpereMaterial = new TransparentMaterial(pink, 0.8, 1.5);
-
     /*********************/
 
     /******ROOM*******/
@@ -61,7 +60,7 @@ Scene::Scene() {
     Triangle* tri4 = new Triangle(glm::vec4(2, 2, -2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(-2, 0, -2, 1), transperantSpereMaterial);
 
     Tetrahedron* tetrahedron = new Tetrahedron(tri1, tri2, tri3, tri4, nullptr);
-    tetrahedron->translate(4,2,-1);
+    tetrahedron->translate(6,0.2,0);
     //geometryList.push_back(tetrahedron);
     /****************************/
 
@@ -118,7 +117,6 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         g = 0;
         b = 0;
     }
-
     if (depth > 5) return glm::vec3(r,g,b);
 
     if (closestIntersection->geometry->material->getMaterialType() == "Diffuse") {
@@ -158,7 +156,7 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance);
 
         if (n1 > n2 && abs(incomingAngle) > abs(criticalAngle)) {
-            return glm::vec3(0,1,1); // Make reflected
+            return reflectedRay->importance*traceRay(reflectedRay, depth+1)/ray->importance;
         }
 
         glm::vec3 transmittedVector = (n1/n2) * I + N * (float)(-(n1/n2)*glm::dot(N,I) - sqrt(1 - pow(n1/n2,2)*(1 - pow(glm::dot(N,I),2)))); 
@@ -166,8 +164,8 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         Ray* transmittedRay = new Ray(glm::vec3(closestIntersection->point) + transmittedVector*0.001f, transmittedVector + glm::vec3(closestIntersection->point), ray, !ray->isInObject, intersectionMaterial->absorption*ray->importance); 
 
         Intersection* transIntersection = getIntersection(transmittedRay);
-        
-        return (transmittedRay->importance*traceRay(transmittedRay, depth+1))/ray->importance;
+
+        return (reflectedRay->importance*traceRay(reflectedRay, depth+1) + transmittedRay->importance*traceRay(transmittedRay, depth+1))/ray->importance;
     }
     
 }
