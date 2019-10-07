@@ -17,7 +17,7 @@ public:
     Scene();
     ~Scene();
 
-    Intersection* getIntersection(Ray* ray);
+    Intersection* getIntersection(Ray* ray, bool ignoreTransparent = false);
     glm::vec3 traceRay(Ray* ray, int depth = 0);
 
 private:
