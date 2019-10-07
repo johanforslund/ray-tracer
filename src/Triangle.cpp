@@ -16,7 +16,7 @@ Triangle::~Triangle() {
 Intersection* Triangle::rayIntersection(Ray* ray) {
     glm::vec3 normal = normalDirection;
     if (ray->isInObject) normal = -normal;
-    if (!ray->isInObject && glm::dot(ray->getVec3(), normal) > 0) return nullptr; // Could maybe not work
+    if (glm::dot(ray->getVec3(), normal) > 0) return nullptr; // Could maybe not work
     
     glm::vec3 T = ray->start - vertexList[0];
     glm::vec3 E1 = vertexList[1] - vertexList[0];

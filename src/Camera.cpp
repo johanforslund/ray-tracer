@@ -40,6 +40,11 @@ void Camera::createImage() {
     // Find max in matrix
     for (int i = 0; i < 800; i++) {
         for (int j = 0; j < 800; j++ ) {
+
+            pixels[i][j].color.r = sqrt(pixels[i][j].color.r);
+            pixels[i][j].color.g = sqrt(pixels[i][j].color.g);
+            pixels[i][j].color.b = sqrt(pixels[i][j].color.b);
+            
             if (pixels[i][j].color.r > maxValue) maxValue = pixels[i][j].color.r;
             if (pixels[i][j].color.g > maxValue) maxValue = pixels[i][j].color.g;
             if (pixels[i][j].color.b > maxValue) maxValue = pixels[i][j].color.b;

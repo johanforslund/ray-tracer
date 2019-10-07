@@ -60,13 +60,13 @@ Scene::Scene() {
     Triangle* tri4 = new Triangle(glm::vec4(2, 2, -2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(-2, 0, -2, 1), transperantSpereMaterial);
 
     Tetrahedron* tetrahedron = new Tetrahedron(tri1, tri2, tri3, tri4, nullptr);
-    tetrahedron->translate(6,0.2,0);
-    //geometryList.push_back(tetrahedron);
+    tetrahedron->translate(6,3.2,0);
+    geometryList.push_back(tetrahedron);
     /****************************/
 
     /********SPHERE*********/
     Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, transperantSpereMaterial);
-    sphere->translate(6,0.2,0);
+    sphere->translate(6,-0.4,0);
     geometryList.push_back(sphere);
     /****************************/
 }
@@ -151,6 +151,9 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         }
         float criticalAngle = asin(n2/n1);
         float incomingAngle = acos((glm::dot(I,-N))/(glm::length(I)*glm::length(N)));
+        float R0 = pow((n1 - n2)/(n1 + n2), 2);
+        float R = R0 + (1 - R0)*pow(1 - cos(abs(incomingAngle)),5);
+        float T = 1 - R;
 
         glm::vec3 reflectedVector = ray->getVec3() - 2*(glm::dot(ray->getVec3(), N))*N;
         Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance);
