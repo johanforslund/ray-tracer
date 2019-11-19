@@ -9,6 +9,7 @@ int main() {
     camera.render();
 
     for (int i =0; i<800; i++) {
+        std::cout << "PROGRESS: " << i << "/800" << std::endl;
         for (int j=0; j<800; j++) {
             glm::vec3 radiance = scene.traceRay(camera.pixels[i][j].ray);
             camera.pixels[i][j].color.r = radiance[0];

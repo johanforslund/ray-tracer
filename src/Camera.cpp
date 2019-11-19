@@ -51,6 +51,8 @@ void Camera::createImage() {
         }
     }
 
+    std::cout << "MAXVALUE: " << maxValue << std::endl;
+
     FILE *fp = fopen("images/image.ppm", "wb"); /* b - binary mode */
     (void) fprintf(fp, "P6\n%d %d\n255\n", 800, 800);
 

@@ -24,11 +24,11 @@ Scene::Scene() {
     /*********************/
 
     /******Light*******/
-    Triangle* lightTri1 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), glm::vec4(-0.5, 0.5, 0, 1), diffuseTetraMaterial);
-    Triangle* lightTri2 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(0.5, -0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), diffuseTetraMaterial); // Light
+    Triangle* lightTri1 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), glm::vec4(-0.5, 0.5, 0, 1), lightMaterial);
+    Triangle* lightTri2 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(0.5, -0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), lightMaterial); // Light
     
     Rectangle* lightRectangle = new Rectangle(lightTri1, lightTri2, nullptr);
-    lightRectangle->translate(4,0,4.95);
+    lightRectangle->translate(4,0,4.99f);
     geometryList.push_back(lightRectangle);
     /*****************/
 
@@ -119,6 +119,13 @@ Intersection* Scene::getIntersection(Ray* ray, bool ignoreTransparent) {
         if (intersection->geometry->material->getMaterialType() == "Transparent" && ignoreTransparent) {
             continue;
         }
+        /*if (intersection->geometry->material->getMaterialType() != "Light" && intersection->point[0] >= 3.5f &&
+            intersection->point[0] <= 4.5f && intersection->point[1] >= -0.5f && intersection->point[1] <= 0.5f &&
+            intersection->point[2] == 5) {
+            //std::cout << "POINT" << glm::to_string(intersection->point) << std::endl;
+            continue;
+        }*/
+        
         if (closestIntersection == nullptr) {
             closestIntersection = intersection;
         }
@@ -131,31 +138,45 @@ Intersection* Scene::getIntersection(Ray* ray, bool ignoreTransparent) {
 }
 
 glm::vec3 Scene::traceRay(Ray* ray, int depth) {
-    glm::vec4 lightSource = glm::vec4(4,0,4.5, 1);
     Intersection* closestIntersection = getIntersection(ray);
     if (closestIntersection == nullptr) return glm::vec3(0,0,0); // Bug pixel
 
-    Ray* shadowRay = new Ray(closestIntersection->point, lightSource, nullptr);
+    float kdSum = 0;
+    //std::cout << "HEJEHJE" << std::endl;
+    for (int i = 0; i < 15; i++) {
+        float randX = std::rand()/(float)RAND_MAX;
+        float randY = std::rand()/(float)RAND_MAX;
+        
+        Ray* shadowRay = new Ray(closestIntersection->point, glm::vec3(randX + 4.0f - 0.5f, randY + 0 - 0.5f, 4.99f), nullptr);
 
-    Intersection* shadowRayIntersection = getIntersection(shadowRay, true);
+        Intersection* shadowRayIntersection = getIntersection(shadowRay, true);
 
-    float kd = 1;
-    float inclinationAngle = acos(glm::dot(shadowRay->getVec3(), closestIntersection->normal)/glm::length(shadowRay->getVec3())*glm::length(closestIntersection->normal));
+        glm::vec3 Sk, Na, Nx;
+        float cosAk, cosBk;
+
+        // Visibility test
+        if (shadowRayIntersection->geometry->material->getMaterialType() == "Light"){
+            Sk = glm::vec3(shadowRayIntersection->point - closestIntersection->point);
+            Na = shadowRayIntersection->normal;
+            Nx = closestIntersection->normal;
+            cosAk = glm::dot(-Sk,Na);
+            cosBk = glm::dot(Sk,Nx);
+            kdSum += (cosAk*cosBk)/pow(glm::length(Sk), 2);
+        }
+    }
+
+    //float inclinationAngle = acos(glm::dot(shadowRay->getVec3(), closestIntersection->normal)/glm::length(shadowRay->getVec3())*glm::length(closestIntersection->normal));
 
     float r, g, b;
 
-    if (glm::distance(glm::vec3(lightSource), glm::vec3(closestIntersection->point)) < glm::distance(glm::vec3(closestIntersection->point), glm::vec3(shadowRayIntersection->point))) {
-        r = closestIntersection->geometry->material->color.r*kd*std::max(0.0f,cos(inclinationAngle));
-        g = closestIntersection->geometry->material->color.g*kd*std::max(0.0f,cos(inclinationAngle));
-        b = closestIntersection->geometry->material->color.b*kd*std::max(0.0f,cos(inclinationAngle));
-    } else {
-        r = 0;
-        g = 0;
-        b = 0;
-    }
+    float Ld = (kdSum/15)*100; // Change for flux
+
+    r = closestIntersection->geometry->material->color.r;
+    g = closestIntersection->geometry->material->color.g;
+    b = closestIntersection->geometry->material->color.b;
 
     //std::cout << "Depth" <<  depth << std::endl;
-    if (depth > 5) return glm::vec3(r,g,b);
+    if (depth > 4) return glm::vec3(r,g,b);
 
     if (closestIntersection->geometry->material->getMaterialType() == "Diffuse") {
         DiffuseMaterial* intersectionMaterial = (DiffuseMaterial*)closestIntersection->geometry->material;
@@ -187,8 +208,14 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
 
         Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector + glm::vec3(closestIntersection->point), ray, false, intersectionMaterial->absorption*ray->importance);
 
-        return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + 0.8f*glm::vec3(r,g,b);
-        //return glm::vec3(r,g,b);
+        return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + Ld*glm::vec3(1,1,1);
+        //return glm::vec3(r,g,b)*Ld;
+    }
+
+    if (closestIntersection->geometry->material->getMaterialType() == "Light") { 
+        
+        //std::cout << "I LIGHT" << std::endl;
+        return glm::vec3(100,100,100);
     }
 
     if (closestIntersection->geometry->material->getMaterialType() == "Mirror") { 
@@ -198,7 +225,7 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
 
         Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector + glm::vec3(closestIntersection->point), ray, false, intersectionMaterial->absorption*ray->importance);
 
-        return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + 0.5f*glm::vec3(r,g,b);
+        return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + Ld*glm::vec3(1,1,1);
     }
 
     if (closestIntersection->geometry->material->getMaterialType() == "Transparent") {
