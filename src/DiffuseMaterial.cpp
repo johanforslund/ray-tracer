@@ -1,7 +1,7 @@
 #include "DiffuseMaterial.hpp"
 
-DiffuseMaterial::DiffuseMaterial(Color _color) : Material(_color){
-
+DiffuseMaterial::DiffuseMaterial(Color _color, float _absorption) : Material(_color){
+    absorption = _absorption;
 }
 
 DiffuseMaterial::~DiffuseMaterial() {

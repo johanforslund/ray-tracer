@@ -10,18 +10,27 @@ Scene::Scene() {
     Color turquoise = Color(0,1,1);
     Color yellow = Color(1,1,0);
     Color pink = Color(1,0.41,0.71);
-
     /*********************/
 
     /******Materials*******/
-    DiffuseMaterial* floorNRoofMaterial = new DiffuseMaterial(white);
-    DiffuseMaterial* frontWallMaterial = new DiffuseMaterial(green);
-    DiffuseMaterial* backWallMaterial = new DiffuseMaterial(red);
+    DiffuseMaterial* floorNRoofMaterial = new DiffuseMaterial(white, 0.05);
+    DiffuseMaterial* frontWallMaterial = new DiffuseMaterial(green, 0.05);
+    DiffuseMaterial* backWallMaterial = new DiffuseMaterial(red, 0.05);
     MirrorMaterial* sphereMaterial = new MirrorMaterial(turquoise, 0.8);
     MirrorMaterial* tetraMaterial = new MirrorMaterial(yellow, 0.8);
-    DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink);
+    DiffuseMaterial* diffuseTetraMaterial = new DiffuseMaterial(pink, 0.05);
     TransparentMaterial* transperantSpereMaterial = new TransparentMaterial(pink, 0.8, 1.5);
+    LightMaterial* lightMaterial = new LightMaterial(pink, 100.0f);
     /*********************/
+
+    /******Light*******/
+    Triangle* lightTri1 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), glm::vec4(-0.5, 0.5, 0, 1), diffuseTetraMaterial);
+    Triangle* lightTri2 = new Triangle(glm::vec4(0.5, 0.5, 0, 1), glm::vec4(0.5, -0.5, 0, 1), glm::vec4(-0.5, -0.5, 0, 1), diffuseTetraMaterial); // Light
+    
+    Rectangle* lightRectangle = new Rectangle(lightTri1, lightTri2, nullptr);
+    lightRectangle->translate(4,0,4.95);
+    geometryList.push_back(lightRectangle);
+    /*****************/
 
     /******ROOM*******/
     geometryList.push_back(new Triangle(glm::vec4(-3, 0, 5, 1), glm::vec4(0, 6, 5, 1), glm::vec4(0, -6, 5, 1), floorNRoofMaterial)); //Roof 1
@@ -52,7 +61,6 @@ Scene::Scene() {
     // Alone tri
     //geometryList.push_back(new Triangle(glm::vec4(6, 0, 2, 1), glm::vec4(5, 1, -2, 1), glm::vec4(7, -1, -2, 1), transperantSpereMaterial));
 
-
     /********TETRAHEDRON*********/
     Triangle* tri1 = new Triangle(glm::vec4(0, 0, 2, 1), glm::vec4(2, 2, -2, 1), glm::vec4(-2, 0, -2, 1), diffuseTetraMaterial);
     Triangle* tri2 = new Triangle(glm::vec4(0, 0, 2, 1), glm::vec4(-2, 0, -2, 1), glm::vec4(2, -2, -2, 1), diffuseTetraMaterial);
@@ -61,12 +69,37 @@ Scene::Scene() {
 
     Tetrahedron* tetrahedron = new Tetrahedron(tri1, tri2, tri3, tri4, nullptr);
     tetrahedron->translate(8,1,0);
-    geometryList.push_back(tetrahedron);
+    //geometryList.push_back(tetrahedron);
+    /****************************/
+
+    /********Box*********/
+    Triangle* boxTri1 = new Triangle(glm::vec4(-2, 2, 2, 1), glm::vec4(-2, 2, -2, 1), glm::vec4(-2, -2, -2, 1), diffuseTetraMaterial);
+    Triangle* boxTri2 = new Triangle(glm::vec4(-2, 2, 2, 1), glm::vec4(-2, -2, -2, 1), glm::vec4(-2, -2, 2, 1), diffuseTetraMaterial); // Front
+
+    Triangle* boxTri3 = new Triangle(glm::vec4(2, 2, 2, 1), glm::vec4(2, -2, 2, 1), glm::vec4(2, 2, -2, 1), diffuseTetraMaterial);
+    Triangle* boxTri4 = new Triangle(glm::vec4(2, -2, 2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(2, 2, -2, 1), diffuseTetraMaterial); // Back
+
+    Triangle* boxTri5 = new Triangle(glm::vec4(2, 2, 2, 1), glm::vec4(-2, 2, 2, 1), glm::vec4(-2, -2, 2, 1), diffuseTetraMaterial);
+    Triangle* boxTri6 = new Triangle(glm::vec4(2, 2, 2, 1), glm::vec4(-2, -2, 2, 1), glm::vec4(2, -2, 2, 1), diffuseTetraMaterial); // Up
+
+    Triangle* boxTri7 = new Triangle(glm::vec4(2, 2, -2, 1), glm::vec4(-2, -2, -2, 1), glm::vec4(-2, 2, -2, 1), diffuseTetraMaterial);
+    Triangle* boxTri8 = new Triangle(glm::vec4(2, 2, -2, 1), glm::vec4(2, -2, -2, 1), glm::vec4(-2, -2, -2, 1), diffuseTetraMaterial); // Down
+
+    Triangle* boxTri9 = new Triangle(glm::vec4(-2, 2, 2, 1), glm::vec4(2, 2, 2, 1), glm::vec4(-2, 2, -2, 1), diffuseTetraMaterial);
+    Triangle* boxTri10 = new Triangle(glm::vec4(2, 2, 2, 1), glm::vec4(2, 2, -2, 1), glm::vec4(-2, 2, -2, 1), diffuseTetraMaterial); // Left
+
+    Triangle* boxTri11 = new Triangle(glm::vec4(-2, -2, 2, 1), glm::vec4(-2, -2, -2, 1), glm::vec4(2, -2, 2, 1), diffuseTetraMaterial);
+    Triangle* boxTri12 = new Triangle(glm::vec4(2, -2, 2, 1), glm::vec4(-2, -2, -2, 1), glm::vec4(2, -2, -2, 1), diffuseTetraMaterial); // Right
+
+    Box* box = new Box(boxTri1, boxTri2, boxTri3, boxTri4, boxTri5, boxTri6, boxTri7, boxTri8, boxTri9, boxTri10,
+                       boxTri11, boxTri12, nullptr);
+    box->translate(8,-2,-2.9);
+    geometryList.push_back(box);
     /****************************/
 
     /********SPHERE*********/
     Sphere* sphere = new Sphere(glm::vec4(0, 0, 0, 1), 1, transperantSpereMaterial);
-    sphere->translate(5,1,0);
+    sphere->translate(8,-2,1);
     geometryList.push_back(sphere);
     /****************************/
 }
@@ -120,10 +153,42 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         g = 0;
         b = 0;
     }
+
+    //std::cout << "Depth" <<  depth << std::endl;
     if (depth > 5) return glm::vec3(r,g,b);
 
     if (closestIntersection->geometry->material->getMaterialType() == "Diffuse") {
-        return glm::vec3(r,g,b);
+        DiffuseMaterial* intersectionMaterial = (DiffuseMaterial*)closestIntersection->geometry->material;
+
+        glm::vec3 normal = closestIntersection->normal;
+
+        float normalLength = glm::length(normal);
+        float phi = atan(normal[1]/normal[0]);
+        if (normal[0] == 0) phi = glm::pi<float>()/2;
+        float theta = atan(sqrt(pow(normal[0],2)+pow(normal[1],2))/normal[2]);
+        if (normal[2] == 0) theta = glm::pi<float>()/2;
+
+        float rand1,rand2;
+        rand1 = std::rand()/(float)RAND_MAX;
+        rand2 = std::rand()/(float)RAND_MAX;
+
+        float phi2 = 2*glm::pi<float>()*rand1;
+        float theta2 = asin(sqrt(rand2));
+
+        phi = phi + phi2;
+        theta = theta + theta2;
+
+        float x,y,z;
+        x = normalLength*cos(phi)*sin(theta);
+        y = normalLength*sin(phi)*sin(theta);
+        z = normalLength*cos(theta);
+
+        glm::vec3 reflectedVector = glm::vec3(x,y,z);
+
+        Ray* reflectedRay = new Ray(closestIntersection->point, reflectedVector + glm::vec3(closestIntersection->point), ray, false, intersectionMaterial->absorption*ray->importance);
+
+        return (reflectedRay->importance*traceRay(reflectedRay, depth+1))/ray->importance + 0.8f*glm::vec3(r,g,b);
+        //return glm::vec3(r,g,b);
     }
 
     if (closestIntersection->geometry->material->getMaterialType() == "Mirror") { 
@@ -162,17 +227,30 @@ glm::vec3 Scene::traceRay(Ray* ray, int depth) {
         Ray* reflectedRay; 
 
         if (n1 > n2 && abs(incomingAngle) > abs(criticalAngle)) {
+            /*if (closestIntersection->point[2] < -0.85 && closestIntersection->point[2] > -0.95) {
+                std::cout << "CRIT" << std::endl;
+                std::cout << "CLOSEST" << glm::to_string(closestIntersection->point) << std::endl;
+            }*/
             reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance);
             return reflectedRay->importance*traceRay(reflectedRay, depth+1)/ray->importance;
+            //return glm::vec3(0,1,1);
         }
 
-        reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance*R);
+        /*if (closestIntersection->point[2] == -4.5) {
+            std::cout << "Point: " << glm::to_string(closestIntersection->point) << std::endl;
+            std::cout << "Normal: " << glm::to_string(closestIntersection->normal) << std::endl;
+        }*/
+
+        reflectedRay = new Ray(closestIntersection->point, reflectedVector+glm::vec3(closestIntersection->point), ray, ray->isInObject, intersectionMaterial->absorption*ray->importance*0.04);
 
         glm::vec3 transmittedVector = (n1/n2) * I + N * (float)(-(n1/n2)*glm::dot(N,I) - sqrt(1 - pow(n1/n2,2)*(1 - pow(glm::dot(N,I),2)))); 
         
-        Ray* transmittedRay = new Ray(glm::vec3(closestIntersection->point) + transmittedVector*0.001f, transmittedVector + glm::vec3(closestIntersection->point), ray, !ray->isInObject, intersectionMaterial->absorption*ray->importance*T); 
+        Ray* transmittedRay = new Ray(glm::vec3(closestIntersection->point) + transmittedVector*0.001f, transmittedVector + glm::vec3(closestIntersection->point), ray, !ray->isInObject, intersectionMaterial->absorption*ray->importance*0.96); 
 
         Intersection* transIntersection = getIntersection(transmittedRay);
+
+        //if (transIntersection->point[1] < 0.3 && transIntersection->point[1] > -0.3 && transIntersection->point[2] < 0.3 &&
+        //    transIntersection->point[2] > -0.3) std::cout << "Point" << glm::to_string(transIntersection->point) << std::endl;
 
         return (reflectedRay->importance*traceRay(reflectedRay, depth+1) + transmittedRay->importance*traceRay(transmittedRay, depth+1))/ray->importance;
     }

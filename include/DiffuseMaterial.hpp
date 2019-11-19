@@ -4,8 +4,10 @@
 class DiffuseMaterial : public Material{
 
 public:
-    DiffuseMaterial(Color _color);
+    DiffuseMaterial(Color _color, float _absorption);
     ~DiffuseMaterial();
 
     std::string getMaterialType();
+
+    float absorption;
 };
